@@ -1,0 +1,25 @@
+{
+    "name": "robert430404/rc-container",
+    "description": "This is a simple Dependency Injection Container for PHP.",
+    "type": "library",
+    "require": {
+        "php": ">=7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Robert Cox",
+            "email": "robert@studiorclv.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "RcContainer\\":"src/RcContainer/",
+            "RcContainer\\Tests\\":"tests/RcContainer/"
+        }
+    }
+}
