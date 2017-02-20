@@ -66,4 +66,26 @@ class Container implements ContainerInterface
     {
         // TODO: Implement deRegisterParameter() method.
     }
+
+    /**
+     * Returns the service and throws an exception when it doesn't exist
+     *
+     * @param string $id
+     * @return mixed|void
+     */
+    public function service(string $id)
+    {
+        // TODO: Implement service() method.
+    }
+
+    /**
+     * Returns the parameter and throws an exception when it doesn't exist
+     *
+     * @param string $id
+     * @return mixed|void
+     */
+    public function parameter(string $id)
+    {
+        // TODO: Implement parameter() method.
+    }
 }
