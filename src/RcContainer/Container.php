@@ -2,7 +2,11 @@
 
 namespace RcContainer;
 
+use Closure;
 use RcContainer\Contracts\ContainerInterface;
+use RcContainer\Exceptions\FactoryNotFoundException;
+use RcContainer\Exceptions\ParameterNotFoundException;
+use RcContainer\Exceptions\ServiceNotFoundException;
 
 /**
  * Class Container
@@ -11,27 +15,41 @@ use RcContainer\Contracts\ContainerInterface;
  */
 class Container implements ContainerInterface
 {
+    /**
+     * @var array
+     */
     private $services;
 
+    /**
+     * @var array
+     */
     private $parameters;
+
+    /**
+     * @var array
+     */
+    private $factories;
 
     /**
      * Container constructor.
      */
     function __construct()
     {
-
+        $this->services   = [];
+        $this->parameters = [];
+        $this->factories  = [];
     }
 
     /**
      * Registers a service inside of the container
      *
      * @param string $id
+     * @param $handler
      * @return mixed|void
      */
-    public function registerService(string $id)
+    public function registerService(string $id, Closure $handler)
     {
-
+        $this->services[$id] = $handler();
     }
 
     /**
@@ -42,18 +60,42 @@ class Container implements ContainerInterface
      */
     public function deRegisterService(string $id)
     {
+        unset($this->services[$id]);
+    }
 
+    /**
+     * Registers a factory inside of the container
+     *
+     * @param string $id
+     * @param Closure $handler
+     * @return mixed|void
+     */
+    public function registerFactory(string $id, Closure $handler)
+    {
+        $this->factories[$id] = $handler;
+    }
+
+    /**
+     * De-Registers a factory from the container
+     *
+     * @param string $id
+     * @return mixed|void
+     */
+    public function deRegisterFactory(string $id)
+    {
+        unset($this->factories[$id]);
     }
 
     /**
      * Registers a parameter inside of the container
      *
      * @param string $id
+     * @param $handler
      * @return mixed|void
      */
-    public function registerParameter(string $id)
+    public function registerParameter(string $id, Closure $handler)
     {
-        // TODO: Implement registerParameter() method.
+        $this->parameters[$id] = $handler();
     }
 
     /**
@@ -64,28 +106,54 @@ class Container implements ContainerInterface
      */
     public function deRegisterParameter(string $id)
     {
-        // TODO: Implement deRegisterParameter() method.
+        unset($this->parameters[$id]);
     }
 
     /**
      * Returns the service and throws an exception when it doesn't exist
      *
      * @param string $id
-     * @return mixed|void
+     * @return mixed
+     * @throws ServiceNotFoundException
      */
     public function service(string $id)
     {
-        // TODO: Implement service() method.
+        if (!isset($this->services[$id])) {
+            throw new ServiceNotFoundException("The service, $id, has not been registered with the container");
+        }
+
+        return $this->services[$id];
     }
 
     /**
      * Returns the parameter and throws an exception when it doesn't exist
      *
      * @param string $id
-     * @return mixed|void
+     * @return mixed
+     * @throws ParameterNotFoundException
      */
     public function parameter(string $id)
     {
-        // TODO: Implement parameter() method.
+        if (!isset($this->parameters[$id])) {
+            throw new ParameterNotFoundException("The parameter, $id, has not been registered with the container");
+        }
+
+        return $this->parameters[$id];
+    }
+
+    /**
+     * Returns a new instance of the object registered to the factory
+     *
+     * @param string $id
+     * @return mixed
+     * @throws FactoryNotFoundException
+     */
+    public function factory(string $id)
+    {
+        if (!isset($this->factories[$id])) {
+            throw new FactoryNotFoundException("The factory, $id, has not been registered with the container");
+        }
+
+        return $this->factories[$id]();
     }
 }

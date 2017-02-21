@@ -2,6 +2,8 @@
 
 namespace RcContainer\Contracts;
 
+use Closure;
+
 /**
  * Interface ContainerInterface
  *
@@ -16,9 +18,10 @@ interface ContainerInterface
      * Registers new service inside of the container
      *
      * @param string $id
+     * @param $handler
      * @return mixed
      */
-    public function registerService(string $id);
+    public function registerService(string $id, Closure $handler);
 
     /**
      * De-Registers a service from the container
@@ -29,12 +32,30 @@ interface ContainerInterface
     public function deRegisterService(string $id);
 
     /**
-     * Registers a new parameter inside of the container.
+     * Registers a factory inside of the container
+     *
+     * @param string $id
+     * @param Closure $handler
+     * @return mixed
+     */
+    public function registerFactory(string $id, Closure $handler);
+
+    /**
+     * De-Registers a factory from the container
      *
      * @param string $id
      * @return mixed
      */
-    public function registerParameter(string $id);
+    public function deRegisterFactory(string $id);
+
+    /**
+     * Registers a new parameter inside of the container.
+     *
+     * @param string $id
+     * @param $handler
+     * @return mixed
+     */
+    public function registerParameter(string $id, Closure $handler);
 
     /**
      * De-Registers a parameter from the container.
@@ -59,4 +80,12 @@ interface ContainerInterface
      * @return mixed
      */
     public function parameter(string $id);
+
+    /**
+     * Returns a new instance of the object registered to the factory
+     *
+     * @param string $id
+     * @return mixed
+     */
+    public function factory(string $id);
 }
