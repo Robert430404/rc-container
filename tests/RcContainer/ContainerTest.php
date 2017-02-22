@@ -320,7 +320,7 @@ class ContainerTest extends TestCase
 
     /**
      * Tests to make sure the right exception is thrown when a
-     * service is not found after being registered and de-registered
+     * factory is not found after being registered and de-registered
      */
     public function testFactoryNotFoundAfterDeRegistered()
     {
