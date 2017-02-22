@@ -92,6 +92,7 @@ The same method works to pass around services:
 
 use RcContainer\Container;
 use Vendor\SDKObject; // Made Up Namespace
+use Vendor\DataFactory; // Made Up Namespace
 
 require 'vendor/autoload.php';
 
