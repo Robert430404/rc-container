@@ -4,6 +4,7 @@ namespace RcContainer\Tests;
 
 use PHPUnit\Framework\TestCase;
 use RcContainer\Container;
+use RcContainer\Exceptions\FactoryNotFoundException;
 use RcContainer\Exceptions\ParameterNotFoundException;
 use RcContainer\Exceptions\ServiceNotFoundException;
 use stdClass;
@@ -68,7 +69,7 @@ class ContainerTest extends TestCase
         $service1 = $container->service('test1');
         $service2 = $container->service('test2');
 
-        $this->assertEquals($service instanceof stdClass,  true);
+        $this->assertEquals($service  instanceof stdClass, true);
         $this->assertEquals($service1 instanceof stdClass, true);
         $this->assertEquals($service2 instanceof stdClass, true);
 
@@ -246,5 +247,95 @@ class ContainerTest extends TestCase
         $this->assertEquals(is_string($param), true);
         $container->deRegisterParameter('test');
         $container->parameter('test');
+    }
+
+    /**
+     * Tests to make sure the right exception is thrown when a service
+     * is not found
+     */
+    public function testFactoryNotFound()
+    {
+        $this->expectException(FactoryNotFoundException::class);
+
+        $container = new Container();
+
+        $container->factory('test');
+    }
+
+    /**
+     * Tests to make sure the container resolves the service
+     */
+    public function testFactoryIsFound()
+    {
+        $container = new Container();
+
+        $container->registerFactory('test', function () {
+            return new stdClass();
+        });
+
+        $factory  = $container->factory('test');
+        $factory1 = $container->factory('test');
+
+        $this->assertEquals($factory instanceof stdClass, true);
+        $this->assertEquals($factory === $factory1, false);
+    }
+
+    /**
+     * Tests to make sure the container resolves the service when many are
+     * present in the container
+     */
+    public function testMultipleFactoryIsFound()
+    {
+        $container = new Container();
+
+        $container->registerFactory('test', function () {
+            return new stdClass();
+        });
+        $container->registerFactory('test1', function () {
+            return new stdClass();
+        });
+        $container->registerFactory('test2', function () {
+            return new stdClass();
+        });
+
+        $factory   = $container->factory('test');
+        $factoryA  = $container->factory('test');
+        $factory1  = $container->factory('test1');
+        $factory12 = $container->factory('test1');
+        $factory2  = $container->factory('test2');
+        $factory22 = $container->factory('test2');
+
+        $this->assertEquals($factory  instanceof stdClass, true);
+        $this->assertEquals($factory1 instanceof stdClass, true);
+        $this->assertEquals($factory2 instanceof stdClass, true);
+
+        $this->assertEquals($factory1 === $factory,  false);
+        $this->assertEquals($factory2 === $factory,  false);
+        $this->assertEquals($factory1 === $factory2, false);
+
+        $this->assertEquals($factoryA === $factory,   false);
+        $this->assertEquals($factory2 === $factory22, false);
+        $this->assertEquals($factory1 === $factory12, false);
+    }
+
+    /**
+     * Tests to make sure the right exception is thrown when a
+     * service is not found after being registered and de-registered
+     */
+    public function testFactoryNotFoundAfterDeRegistered()
+    {
+        $this->expectException(FactoryNotFoundException::class);
+
+        $container = new Container();
+
+        $container->registerFactory('test', function () {
+            return new stdClass();
+        });
+
+        $factory = $container->factory('test');
+
+        $this->assertEquals($factory instanceof stdClass, true);
+        $container->deRegisterFactory('test');
+        $container->factory('test');
     }
 }
