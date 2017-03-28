@@ -44,7 +44,44 @@ $container->registerFactory('test-factory', function () {
     return new stdClass();
 });
 ```
+You can also assign multiple services, parameters, or factories in a single call using this method:
 
+```php
+<?php
+
+use RcContainer\Container;
+
+require 'vendor/autoload.php';
+
+$container = new Container();
+
+$container->registerServices([
+    'test-service-1' => function () {
+        return new stdClass();
+    },
+    'test-service-2' => function () {
+        return new stdClass();
+    }
+]);
+
+$container->registerParameters([
+    'test-parameter-1' => function () {
+        return 'parameter variable';
+    },
+    'test-parameter-2' => function () {
+        return 'second parameter variable';
+    }
+]);
+
+$container->registerFactories([
+    'test-factory-1' => function () {
+        return new stdClass();
+    },
+    'test-factory-2' => function () {
+        return new stdClass();
+    }
+]);
+```
 Once you have your services/parameters/factories defined, you then call the retrieval methods on the container to get
 access to your registered services/parameters/factories.
 
