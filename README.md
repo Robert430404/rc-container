@@ -1,6 +1,6 @@
 [![Latest Stable Version](https://poser.pugx.org/robert430404/rc-container/v/stable)](https://packagist.org/packages/robert430404/rc-container)
 [![Build Status](https://travis-ci.org/Robert430404/rc-container.svg?branch=master)](https://travis-ci.org/Robert430404/rc-container)
-[![codecov](https://codecov.io/gh/Robert430404/rc-container/branch/master/graph/badge.svg)](https://io/gh/Robert430404/rc-container)
+[![codecov](https://codecov.io/gh/Robert430404/rc-container/branch/master/graph/badge.svg)](https://codecov.io/gh/Robert430404/rc-container)
 
 ### What Is This?
 
