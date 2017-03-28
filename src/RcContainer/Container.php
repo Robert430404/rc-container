@@ -64,6 +64,19 @@ class Container implements ContainerInterface
     }
 
     /**
+     * Registers all of the provided services
+     *
+     * @param array $handlers
+     * @return void
+     */
+    public function registerServices(array $handlers)
+    {
+        foreach ($handlers as $id => $handler) {
+            $this->services[$id] = $handler();
+        }
+    }
+
+    /**
      * Registers a factory inside of the container
      *
      * @param string $id
@@ -87,6 +100,19 @@ class Container implements ContainerInterface
     }
 
     /**
+     * Registers all of the provided services
+     *
+     * @param array $handlers
+     * @return void
+     */
+    public function registerFactories(array $handlers)
+    {
+        foreach ($handlers as $id => $handler) {
+            $this->factories[$id] = $handler;
+        }
+    }
+
+    /**
      * Registers a parameter inside of the container
      *
      * @param string $id
@@ -107,6 +133,19 @@ class Container implements ContainerInterface
     public function deRegisterParameter(string $id)
     {
         unset($this->parameters[$id]);
+    }
+
+    /**
+     * Registers all of the provided services
+     *
+     * @param array $handlers
+     * @return void
+     */
+    public function registerParameters(array $handlers)
+    {
+        foreach ($handlers as $id => $handler) {
+            $this->parameters[$id] = $handler();
+        }
     }
 
     /**

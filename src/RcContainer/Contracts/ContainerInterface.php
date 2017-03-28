@@ -19,7 +19,7 @@ interface ContainerInterface
      *
      * @param string $id
      * @param $handler
-     * @return mixed
+     * @return void
      */
     public function registerService(string $id, Closure $handler);
 
@@ -27,16 +27,25 @@ interface ContainerInterface
      * De-Registers a service from the container
      *
      * @param string $id
-     * @return mixed
+     * @return void
      */
     public function deRegisterService(string $id);
+
+    /**
+     * Registers new service inside of the container
+     *
+     * @param string $id
+     * @param $handler
+     * @return void
+     */
+    public function registerServices(array $handlers);
 
     /**
      * Registers a factory inside of the container
      *
      * @param string $id
      * @param Closure $handler
-     * @return mixed
+     * @return void
      */
     public function registerFactory(string $id, Closure $handler);
 
@@ -44,7 +53,7 @@ interface ContainerInterface
      * De-Registers a factory from the container
      *
      * @param string $id
-     * @return mixed
+     * @return void
      */
     public function deRegisterFactory(string $id);
 
@@ -53,7 +62,7 @@ interface ContainerInterface
      *
      * @param string $id
      * @param $handler
-     * @return mixed
+     * @return void
      */
     public function registerParameter(string $id, Closure $handler);
 
@@ -61,7 +70,7 @@ interface ContainerInterface
      * De-Registers a parameter from the container.
      *
      * @param string $id
-     * @return mixed
+     * @return void
      */
     public function deRegisterParameter(string $id);
 

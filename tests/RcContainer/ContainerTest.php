@@ -30,6 +30,35 @@ class ContainerTest extends TestCase
     }
 
     /**
+     * Tests multi service declaration
+     */
+    public function testMultiServiceRegistration()
+    {
+        $container = new Container();
+
+        $container->registerServices([
+            'service' => function () {
+                return new stdClass();
+            },
+            'second-service' => function () {
+                return new stdClass();
+            }
+        ]);
+
+        $service  = $container->service('service');
+        $service1 = $container->service('service');
+
+        $this->assertEquals($service instanceof stdClass, true);
+        $this->assertEquals($service, $service1);
+
+        $secondService  = $container->service('second-service');
+        $secondService1 = $container->service('second-service');
+
+        $this->assertEquals($secondService instanceof stdClass, true);
+        $this->assertEquals($secondService, $secondService1);
+    }
+
+    /**
      * Tests to make sure the container resolves the service
      */
     public function testServiceIsFound()
@@ -110,6 +139,37 @@ class ContainerTest extends TestCase
         $container = new Container();
 
         $container->parameter('test');
+    }
+
+    /**
+     * Tests multi service declaration
+     */
+    public function testMultiParameterRegistration()
+    {
+        $container = new Container();
+
+        $container->registerParameters([
+            'test' => function () {
+                return 'test-param';
+            },
+            'second-test' => function () {
+                return 'second-test-param';
+            }
+        ]);
+
+        $param  = $container->parameter('test');
+        $param1 = $container->parameter('test');
+
+        $this->assertEquals(is_string($param), true);
+        $this->assertEquals($param, 'test-param');
+        $this->assertEquals($param, $param1);
+
+        $secondParam  = $container->parameter('second-test');
+        $secondParam1 = $container->parameter('second-test');
+
+        $this->assertEquals(is_string($secondParam), true);
+        $this->assertEquals($secondParam, 'second-test-param');
+        $this->assertEquals($secondParam, $secondParam1);
     }
 
     /**
@@ -260,6 +320,32 @@ class ContainerTest extends TestCase
         $container = new Container();
 
         $container->factory('test');
+    }
+
+    public function testMultiFactoryRegistration()
+    {
+        $container = new Container();
+
+        $container->registerFactories([
+            'test' => function () {
+                return new stdClass();
+            },
+            'second-test' => function () {
+                return new stdClass();
+            }
+        ]);
+
+        $factory  = $container->factory('test');
+        $factory1 = $container->factory('test');
+
+        $this->assertEquals($factory instanceof stdClass, true);
+        $this->assertEquals($factory === $factory1, false);
+
+        $secondFactory  = $container->factory('second-test');
+        $secondFactory1 = $container->factory('second-test');
+
+        $this->assertEquals($secondFactory instanceof stdClass, true);
+        $this->assertEquals($secondFactory === $secondFactory1, false);
     }
 
     /**
