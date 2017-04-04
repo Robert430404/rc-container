@@ -82,6 +82,33 @@ $container->registerFactories([
     }
 ]);
 ```
+Or you can use a more conceise syntax like this:
+
+```php
+<?php
+
+use RcContainer\Container;
+
+require 'vendor/autoload.php';
+
+$container = new Container();
+
+$container->registerServices([
+    'test-service-1' => 'stdClass',
+    'test-service-2' => 'stdClass'
+]);
+
+$container->registerParameters([
+    'test-parameter-1' => 'parameter variable',
+    'test-parameter-2' => 'second parameter variable'
+]);
+
+$container->registerFactories([
+    'test-factory-1' => 'stdClass',
+    'test-factory-2' => 'stdClass'
+]);
+```
+
 Once you have your services/parameters/factories defined, you then call the retrieval methods on the container to get
 access to your registered services/parameters/factories.
 

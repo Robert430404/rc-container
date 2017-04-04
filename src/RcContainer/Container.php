@@ -72,7 +72,12 @@ class Container implements ContainerInterface
     public function registerServices(array $handlers)
     {
         foreach ($handlers as $id => $handler) {
-            $this->services[$id] = $handler();
+            if (is_callable($handler)) {
+                $this->services[$id] = $handler();
+                continue;
+            }
+
+            $this->services[$id] = new $handler;
         }
     }
 
@@ -108,7 +113,12 @@ class Container implements ContainerInterface
     public function registerFactories(array $handlers)
     {
         foreach ($handlers as $id => $handler) {
-            $this->factories[$id] = $handler;
+            if (is_callable($handler)) {
+                $this->factories[$id] = $handler;
+                continue;
+            }
+
+            $this->factories[$id] =  $handler;
         }
     }
 
@@ -144,7 +154,11 @@ class Container implements ContainerInterface
     public function registerParameters(array $handlers)
     {
         foreach ($handlers as $id => $handler) {
-            $this->parameters[$id] = $handler();
+            if (is_callable($handler)) {
+                $this->parameters[$id] = $handler();
+            }
+
+            $this->parameters[$id] = $handler;
         }
     }
 
@@ -177,6 +191,10 @@ class Container implements ContainerInterface
             throw new ParameterNotFoundException("The parameter, $id, has not been registered with the container");
         }
 
+        if (is_callable($this->parameters[$id])) {
+            return $this->parameters[$id]();
+        }
+
         return $this->parameters[$id];
     }
 
@@ -193,6 +211,10 @@ class Container implements ContainerInterface
             throw new FactoryNotFoundException("The factory, $id, has not been registered with the container");
         }
 
-        return $this->factories[$id]();
+        if (is_callable($this->factories[$id])) {
+            return $this->factories[$id]();
+        }
+
+        return new $this->factories[$id];
     }
 }
